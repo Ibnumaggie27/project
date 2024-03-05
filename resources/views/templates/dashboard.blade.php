@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.19.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 
-     <title>@yield('title', 'Desa Palasari') | Website Resmi desa Palasari</title>
+    <title>@yield('title', 'Desa Palasari') | Website Resmi desa Palasari</title>
 
 </head>
 
@@ -53,7 +53,7 @@
             </div>
         </nav>
 
-        <div class="Dashboard__content--layoutMobile container w-full mx-auto mt-24 px-10 lg:px-4">
+        <div class="Dashboard__content--layoutMobile container w-full mx-auto mt-24 px-10 lg:px-4" style="margin-bottom: 2%;">
             @yield('content')
         </div>
     </div>
@@ -64,6 +64,7 @@
     <script src="{{ asset('/js/costum.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/tabel.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/main.js') }}" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
@@ -71,6 +72,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

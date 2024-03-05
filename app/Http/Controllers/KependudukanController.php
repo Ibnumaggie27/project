@@ -11,23 +11,55 @@ use Maatwebsite\Excel\Facades\Excel; // Tambahkan use statement untuk model Kepe
 
 class KependudukanController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $penduduk = penduduk::all();
         return view('data.kependudukan', compact('penduduk'));
     }
 
-    public function Kependudukan() {
-    
+    public function Kependudukan()
+    {
+
         return view('kelola_data_masyarakat.kependudukan', [
-            'penduduk'  => penduduk::paginate(25), 
+            'penduduk'  => penduduk::paginate(25),
             'title' => 'Data Kependudukan',
-            'page'  => 'kependudukan'
+            'page'  => 'kependudukan',
+            'url' => "Kependudukan",
             //'users' => User::where('level', 'masyarakat')->get()
         ]);
     }
-    
+    public function DetailsKependudukan($id)
+    {
+        $penduduk = penduduk::find($id);
 
-    public function input() {
+        if ($penduduk) {
+            return view('kelola_data_masyarakat.detail', [
+                'penduduk'  => $penduduk,
+                'title' => 'Data Kependudukan',
+            ]);
+        } else {
+            return redirect()->back()->with('error', 'Penduduk not found');
+        }
+    }
+
+    public function search(Request $request)
+    {
+        // Retrieve the search query from the request
+        $search = $request->input('search');
+
+        // Perform the search query
+        $penduduk = Penduduk::where('namaLengkap', 'LIKE', '%' . $search . '%')
+            ->orWhere('noKK', 'LIKE', '%' . $search . '%')
+            ->orWhere('NIK', 'LIKE', '%' . $search . '%')
+            ->orWhere('jk', 'LIKE', '%' . $search . '%')
+            ->get();
+
+        // Return the filtered data as JSON response
+        return response()->json($penduduk);
+    }
+
+    public function input()
+    {
         return view('kelola_data_masyarakat/input', [
             'title' => 'Input Kependudukan',
             'page'  => 'input',
@@ -35,7 +67,8 @@ class KependudukanController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'noKK' => 'required',
             'namaLengkap' => 'required',
@@ -73,20 +106,22 @@ class KependudukanController extends Controller
         return redirect('data/kependudukan')->with('berhasil', 'Berhasil menambahkan petugas!');
     }
 
-    public function import(Request $request){
+    public function import(Request $request)
+    {
         $data = $request->file('file');
 
         $namafile = $data->getClientOriginalName();
         $data->move('pendudukData', $namafile);
 
-        Excel::import(new pendudukImport, \public_path('/pendudukdata/'.$namafile));
+        Excel::import(new pendudukImport, \public_path('/pendudukdata/' . $namafile));
         return \redirect()->back();
     }
-    public function destroy(penduduk $item, $id) {
-        if (penduduk::destroy($id)) {
-            return redirect()->back()->with('berhasil', 'Berhasil menghapus pengguna!');
+    public function destroy($id)
+    {
+        if (Penduduk::destroy($id)) {
+            return response()->json(['success' => true, 'message' => 'Berhasil menghapus pengguna!']);
         } else {
-            return redirect()->back()->with('gagal', 'Gagal menghapus pengguna!');
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus pengguna!']);
         }
     }
 }

@@ -284,7 +284,6 @@ a {
 .card-profil-desa {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background-color: #f1fcff;
-    height: 35vh;
     width: 75%;
     border: solid 1px;
     border-color: black;
@@ -306,7 +305,6 @@ a {
 .card-profil-apbdes {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background: white;
-    height: 35vh;
     width: 75%;
     border: solid 1px;
     border-color: black;
@@ -955,6 +953,13 @@ a {
 
     /* End Berita */
 
+    /* Tabel */
+
+    .textTabelTop,
+    .textTable {
+        font-size: 12px;
+    }
+
 }
 
 /* CSS for mobile */
@@ -1283,6 +1288,14 @@ a {
     }
 
     #details-news #content-desc {
+        font-size: 10px;
+    }
+
+
+    /* Tabel */
+
+    .textTabelTop,
+    .textTable {
         font-size: 10px;
     }
 

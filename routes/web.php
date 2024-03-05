@@ -19,6 +19,7 @@ use App\Http\Controllers\bpsController;
 use App\Http\Controllers\bbpController;
 use App\Http\Controllers\bayi1sampai5tahunController;
 use App\Models\Pengaduan;
+use App\Models\PengajuanSurat;
 use App\Models\Tanggapan;
 
 
@@ -42,18 +43,23 @@ Route::get('/dashboard', function () {
 })->middleware('auth');
 
 // Route::get('/', [DashboardController::class, 'index'])->middleware('auth');
+Route::get('/data/Pengaduan/Search', [PengaduanController::class, 'search']);
 Route::put('/pengaduan/respon/{pengaduan}', [PengaduanController::class, 'response'])->middleware('auth');
 Route::get('/pengaduan/belum', [PengaduanController::class, 'belum'])->middleware('auth');
 Route::get('/pengaduan/proses', [PengaduanController::class, 'proses'])->middleware('auth');
 Route::get('/pengaduan/selesai', [PengaduanController::class, 'selesai'])->middleware('auth');
 Route::resource('/pengaduan', PengaduanController::class)->middleware('auth');
 Route::resource('/tanggapan', TanggapanController::class)->middleware('auth');
+Route::post('/data/tanggapan/delete/{id}', [TanggapanController::class, 'destroy']);
+Route::get('/data/tanggapan/search', [TanggapanController::class, 'search']);
 
 Route::get('/pengajuan-surat/surat', function () {
     return view('pengajuan_surat.surat', [
         'title'           => 'Pilih-Surat',
     ]);
 })->name('surat');
+
+Route::get('/data/Pengajuan-Surat/Search', [PengajuanSuratController::class, 'search']);
 Route::put('/pengajuan-surat/{pengajuan_surat}/approve', [PengajuanSuratController::class, 'approve'])->middleware('auth')->name('pengajuan_surat.approve');
 Route::put('/pengajuan-surat/{pengajuan_surat}/verifikasi', [PengajuanSuratController::class, 'verifikasi'])->middleware('auth')->name('pengajuan_surat.verifikasi');
 Route::put('/pengajuan-surat/{pengajuan_surat}/reject', [PengajuanSuratController::class, 'reject'])->middleware('auth')->name('pengajuan_surat.reject');
@@ -151,7 +157,10 @@ Route::post('/data/importkematian', [KematianController::class, 'importkematian'
 
 //untuk Bkependudukan
 Route::get('/data/kependudukan', [KependudukanController::class, 'Kependudukan']);
+Route::get('/data/kependudukan/search', [KependudukanController::class, 'search']);
 Route::get('/data/input', [KependudukanController::class, 'input']);
+Route::post('/data/Kependudukan/delete/{id}', [KependudukanController::class, 'destroy']);
+Route::get('/data/Kependudukan/detail/{id}', [KependudukanController::class, 'DetailsKependudukan']);
 Route::post('/data/store', [KependudukanController::class, 'store'])->name('data.store');
 Route::post('/data/import', [KependudukanController::class, 'import'])->name('import');
 Route::resource('/penduduk', KependudukanController::class);

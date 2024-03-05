@@ -53,6 +53,11 @@
                 <div class="col-md-6 py-2">
                     <div class="input-group">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search">
+                        <button type="button" id="searchButton" class="btn btn-submit border">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div id="btn__down_largeKependudukan" class="col-md-6 d-flex justify-content-end py-2">
@@ -96,12 +101,12 @@
                         <td class="textTable px-2 py-4 text-secondary align-middle">{{ $item->namaLengkap }}</td>
                         <td class="textTable px-2 py-4 text-secondary align-middle">{{ $item->jk }}</td>
                         <td class="textTable px-2 py-4 text-secondary align-middle">
-                            <button class="text-primary text-center detailKependudukan" data-user="">
+                            <button class="text-primary text-center" onclick="openDetailBlade('{{$url}}',' {{$item->id}}')">
                                 <i class='bx bx-edit-alt'></i>
                             </button>
                         </td>
                         <td class="textTable px-2 py-4 text-secondary align-middle">
-                            <button class="text-danger text-center deletePenduduk" data-id="{{ $item->id }}">
+                            <button class="text-danger text-center" onclick="deleteConfirmation('{{$url}}',' {{$item->id}}', '{{ addslashes($item->namaLengkap) }}' )">
                                 <i class="bx bxs-trash" style="margin-left:10px;"></i>
                             </button>
                         </td>
@@ -111,19 +116,58 @@
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center m-4 p-4">
                 {{ $penduduk->links() }}
             </div>
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
                 $(document).ready(function() {
-                    $('#searchInput').on('keyup', function() {
-                        var value = $(this).val().toLowerCase();
-                        $('#pendudukTable tbody tr').filter(function() {
-                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    $('#searchButton').on('click', function() {
+                        var searchValue = $('#searchInput').val();
+
+                        // AJAX request to search route with search query
+                        $.ajax({
+                            url: '/data/kependudukan/search', // Replace with your search route
+                            method: 'GET',
+                            data: {
+                                search: searchValue
+                            },
+                            success: function(response) {
+                                // Clear existing table rows
+                                $('#pendudukTable tbody').empty();
+
+                                // Append new table rows based on search results
+                                $.each(response, function(index, item) {
+                                    var newRow = '<tr>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.id + '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.noKK + '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.NIK + '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.namaLengkap + '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.jk + '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' +
+                                        '<button class="text-primary text-center detailKependudukan" data-user="">' +
+                                        '<i class="bx bx-edit-alt"></i>' +
+                                        '</button>' +
+                                        '</td>' +
+                                        '<td class="textTable px-2 py-4 text-secondary align-middle">' +
+                                        '<button class="text-danger text-center" onclick="deleteConfirmation(' + '\'{{ $url }}\', \'' + item.id + '\', \'' + item.namaLengkap + '\' )">' +
+                                        '<i class="bx bxs-trash" style="margin-left:10px;"></i>' +
+                                        '</button>' +
+                                        '</td>' +
+                                        '</tr>';
+
+                                    $('#pendudukTable tbody').append(newRow);
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
                         });
                     });
                 });
+            </script>
+            <script>
+
             </script>
         </div>
     </div>

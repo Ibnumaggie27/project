@@ -41,6 +41,31 @@ class PengajuanSuratController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+
+        $search = $request->input('search');
+
+
+        $PengajuanSurat = PengajuanSurat::whereRaw("DATE_FORMAT(created_at, '%d %M %Y') LIKE '%" . $search . "%'")
+            ->orWhere('jenis_surat', 'LIKE', '%' . $search . '%')
+            ->orWhere('status', 'LIKE', '%' . $search . '%')
+            ->orWhereHas('masyarakat', function ($query) use ($search) {
+                $query->where('nama', 'LIKE', '%' . $search . '%');
+            })
+            ->orWhereHas('masyarakat', function ($query) use ($search) {
+                $query->where('telepon', 'LIKE', '%' . $search . '%');
+            })
+            ->with('masyarakat:id,nama,telepon')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        return response()->json($PengajuanSurat);
+    }
+
+
+
 
     public function create(Request $request)
     {
@@ -167,10 +192,11 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', $nama_photo);
+                    $data[$photoField] = $path;
                 }
             }
+
 
             $data['jenis_surat'] = 'Surat Keterangan';
 
@@ -204,8 +230,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -245,8 +271,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -286,8 +312,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -323,8 +349,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -368,8 +394,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -404,8 +430,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -440,8 +466,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -478,8 +504,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -515,8 +541,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -552,8 +578,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -589,8 +615,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -626,8 +652,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -671,8 +697,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -712,8 +738,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -750,8 +776,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -787,8 +813,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -829,8 +855,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -865,8 +891,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -901,8 +927,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -945,8 +971,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -985,8 +1011,8 @@ class PengajuanSuratController extends Controller
                 if ($request->hasFile($photoField)) {
                     $photo = $request->file($photoField);
                     $nama_photo = $photoField . '_' . time() . '.' . $photo->getClientOriginalExtension();
-                    $photo->move(public_path('uploads'), $nama_photo);
-                    $data[$photoField] = $nama_photo;
+                    $path = $photo->store('public/Persyaratan', 'public');
+                    $data[$photoField] = $path;
                 }
             }
 
@@ -1096,7 +1122,7 @@ class PengajuanSuratController extends Controller
         } else {
             if ($pengajuanSurat->status == 'Diproses') {
                 if ($pengajuanSurat->jenis_surat === 'Surat Keterangan Domisili Haji') {
-                   
+
                     $nomor_surat = '456/' . $nomorSurat . '/KESRA/' . $bulanRomawi . '/' . date("Y");
 
                     return view('pengajuan_surat.proses_surat_keterangan_domisili_haji', [

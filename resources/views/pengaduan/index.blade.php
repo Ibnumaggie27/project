@@ -14,36 +14,45 @@
 </div>
 <div class="card">
     <div class="card-header bg-white py-3">
-        <div class="col-12">
-            <div class="row align-items-center py-2">
-                <div class="col-md-12 py-2">
-                    <div class="input-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search">
-                    </div>
-                </div>
+        <div class="col-md-6 py-2">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search">
+                <button type="button" id="searchButton" class="btn btn-submit border">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
     <div class="card-body">
-        <div class="tabel-container overflow-x-auto">
-            <table class="w-full rounded-lg bg-white divide-y divide-gray overflow-hidden mb-5">
-                <thead class="themeColor">
+        <div class="w-full rounded-lg bg-white divide-y divide-gray overflow-x-auto">
+            <table id="informasiTable" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="themeColor text-center align-middle">
                     <tr class="text-center">
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4">No</th>
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4">Tanggal</th>
+                        <th rowspan="2" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">No</th>
+                        <th rowspan="2" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">Tanggal</th>
                         @canany(['petugas', 'admin'])
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4">Pelapor</th>
+                        <th rowspan="2" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">Pelapor</th>
                         @endcanany
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4">Isi Laporan</th>
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4 text-center">Status</th>
-                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4">Aksi</th>
+                        <th rowspan="2" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">Isi Laporan</th>
+                        <th rowspan="2" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle text-center">Status</th>
+                        <th colspan="3" class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle text-center">aksi</th>
+
+                    </tr>
+                    <tr>
+                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">Lihat</th>
+                        @can('masyarakat')
+                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">hapus</th>
+                        <th class="textTabelTop font-semibold text-sm uppercase px-4 py-4 align-middle">ubah</th>
+                        @endcan
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray">
+                <tbody class="text-center">
                     @foreach ($pengaduan as $aduan)
                     <tr>
-                        <td class="textTable px-4 py-4 text-secondary">{{ $loop->iteration }}</td>
-                        <td class="textTable px-4 py-4 text-secondary">{{ date('d F Y', strtotime($aduan->created_at)) }}</td>
+                        <td class="textTable px-4 py-4 text-secondary align-middle">{{ $loop->iteration }}</td>
+                        <td class="textTable px-4 py-4 text-secondary align-middle">{{ date('d F Y', strtotime($aduan->created_at)) }}</td>
                         @canany(['petugas', 'admin'])
                         <td class="textTable px-4 py-4">
                             @if ($aduan->masyarakat)
@@ -55,39 +64,129 @@
                             @endif
                         </td>
                         @endcanany
-                        <td class="textTable px-4 py-4 text-secondary">{{ substr($aduan->isi_laporan, 0, 70) . '...' }}</td>
+                        <td class="textTable px-4 py-4 text-secondary align-middle">{{ substr($aduan->isi_laporan, 0, 70) . '...' }}</td>
                         <td class="textTable px-4 py-4 text-center">
-                            <span class="text-white text-sm w-1/3 pb-1 {{ $aduan->status == 'proses' ? 'bg-warning' : '' }} {{ $aduan->status == 'selesai' ? 'bg-success' : '' }} {{ $aduan->status == '0' ? 'bg-orange' : '' }} font-semibold px-2 rounded-full">{{ $aduan->status == '0' ? 'menunggu' : $aduan->status }}</span>
+                            @if ($aduan->status == 'proses')
+                            <span class="textTable text-dark text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-warning ">
+                                Proses
+                            </span>
+                            @endif
+
+                            @if ($aduan->status == '0')
+                            <span class="textTable text-white text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-orange ">
+                                Menunggu
+                            </span>
+                            @endif
+
+                            @if ($aduan->status == 'selesai')
+                            <span class="textTable text-white text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-success ">
+                                Selesai
+                            </span>
+                            @endif
                         </td>
-                        <td class="textTable px-4 py-4 flex flex-wrap justify-start">
-                            <a href="/pengaduan/{{ $aduan->id }}" class="text-primary"  style="margin-left:10px;">
+                        <td class="textTable px-4 py-4 ">
+                            <a href="/pengaduan/{{ $aduan->id }}" class="text-primary" style="margin-left:10px;">
                                 <i class="bx bxs-comment-dots text-lg"></i>
                             </a>
-                            @can('masyarakat')
+                        </td>
+                        @can('masyarakat')
+                        <td class="textTable px-4 py-4">
                             @if ($aduan->status !== 'proses')
                             <button class="text-danger deletePengaduan" data-id="{{ $aduan->id }}">
                                 <i class="bx bxs-trash text-lg"></i>
                             </button>
                             @endif
+                        </td>
+                        <td class="textTable px-4 py-4 ">
                             @if ($aduan->status == '0')
                             <a href="/pengaduan/{{ $aduan->id }}/edit" class="text-warning">
                                 <i class="bx bxs-pencil text-lg"></i>
                             </a>
                             @endif
-                            @endcan
+
                         </td>
+                        @endcan
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#searchInput').on('keyup', function() {
-                    var value = $(this).val().toLowerCase();
-                    $('#informasiTable tbody tr').filter(function() {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                $('#searchButton').on('click', function() {
+                    var searchValue = $('#searchInput').val();
+
+                    // AJAX request ke route pencarian dengan query pencarian
+                    $.ajax({
+                        url: '/data/Pengaduan/Search',
+                        method: 'GET',
+                        data: {
+                            search: searchValue
+                        },
+                        success: function(response) {
+                            // Bersihkan isi tabel sebelum menambahkan hasil pencarian
+                            $('#informasiTable tbody').empty();
+
+                            // Tambahkan baris baru berdasarkan hasil pencarian
+                            $.each(response, function(index, item) {
+                                var newRow = '<tr>' +
+                                    '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.id + '</td>' +
+                                    '<td class="textTable px-2 py-4 text-secondary align-middle">' + formatDate(new Date(item.created_at)) + '</td>';
+
+                                @canany(['petugas', 'admin'])
+                                newRow += '<td class="textTable px-2 py-4 text-secondary align-middle">';
+                                newRow += '<a class="openDetail text-danger cursor-pointer" data-nama="' + item.masyarakat.nama + '" data-telepon="' + item.masyarakat.telepon + '" data-level="' + item.masyarakat.level + '">' + item.masyarakat.nama + '</a>';
+                                newRow += '</td>';
+                                @endcanany
+
+
+                                // Tambahkan kolom isi laporan
+                                newRow += '<td class="textTable px-2 py-4 text-secondary align-middle">' + item.isi_laporan.substr(0, 70) + '...' + '</td>';
+                                newRow += '<td class="textTable px-2 py-4 text-secondary align-middle">';
+
+                                // Tambahkan status surat sesuai dengan kondisi
+                                if (item.status == 'proses') {
+                                    newRow += '<span class="textTable text-dark text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-warning">Pending</span>';
+                                } else if (item.status == 'verifikasi') {
+                                    newRow += '<span class="textTable text-white text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-orange">sudah Terverifikasi</span>';
+                                } else if (item.status == '0') {
+                                    newRow += '<span class="textTable text-white text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-orange">Sedang Diproses</span>';
+                                } else if (item.status == 'selesai') {
+                                    newRow += '<span class="textTable text-white text-sm w-1/3 py-2 font-semibold px-2 rounded-full bg-success">Ditolak</span>';
+                                }
+
+                                newRow += '</td>';
+
+                                newRow += '<td class="textTable px-4 py-4 ">' +
+                                    '<a href = "/pengaduan/{{ $aduan->id }}"class = "text-primary" style = "margin-left:10px;">' +
+                                    '<i class = "bx bxs-comment-dots text-lg" > </i>' +
+                                    '</a>' +
+                                    '</td>';
+
+                                @can('masyarakat')
+                                newRow += '<td class="align-middle textTable px-4 py-4">';
+                                if (item.status == 'beres') {
+                                    newRow += '<button class="text-danger deletePengaduan" data-id="' + item.id + '"><i class="bx bxs-trash text-lg"></i></button>';
+                                }
+                                newRow += '</td>';
+
+                                newRow += '<td class="align-middle textTable px-4 py-4">';
+                                if (item.status == 'beres') {
+                                    newRow += '<a href="/pengaduan/' + item.id + '/edit" class="text-warning"><i class="bx bxs-pencil text-lg"></i></a>';
+                                }
+                                newRow += '</td>';
+                                @endcan
+
+                                newRow += '</tr>';
+
+                                $('#informasiTable tbody').append(newRow);
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
                     });
                 });
             });

@@ -39,10 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const layoutBtnPengaduan = document.querySelectorAll(".layoutBtnPengaduan")
   const btnPengaduan = document.querySelectorAll(".btnPengaduan")
 
-  //Table Tampilan,layout, dan text
-  const textTabelTop = document.querySelectorAll(".textTabelTop")
-  const textTabel = document.querySelectorAll(".textTable")
-
   //Tampilan header username
   const usernameLargeScreen = document.getElementById("usernameLargeScreen");
   const usernameSmallScreen = document.getElementById("usernameSmallScreen");
@@ -68,14 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnUP_mobileKependudukan = document.getElementById("btn__up_mobileKependudukan");
 
   //layout konfirmasi untuk detail pengajuan surat
-  const  layout__KonfirmasiDesktop = document.querySelectorAll(".layout__Konfirmasi--Desktop");
+  const layout__KonfirmasiDesktop = document.querySelectorAll(".layout__Konfirmasi--Desktop");
 
   // layout btn login pada landing-page
-  const  layout__btnLogin = document.querySelectorAll(".layout__btnLogin--Desktop");
+  const layout__btnLogin = document.querySelectorAll(".layout__btnLogin--Desktop");
 
   // layot content mobile 
-  const  layout__contentMobile = document.querySelectorAll(".Dashboard__content--layoutMobile");
-  
+  const layout__contentMobile = document.querySelectorAll(".Dashboard__content--layoutMobile");
+
 
 
   // Check viewport width and apply styles accordingly
@@ -95,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Apply styles for smaller screens
-  function  applyStylesForMobile__MoreSmall_Screens() {
+  function applyStylesForMobile__MoreSmall_Screens() {
     removeDescElementsForMobile()
     removeLatestNewsElement();
     adjustColumnWidths();
@@ -195,11 +191,6 @@ document.addEventListener("DOMContentLoaded", function () {
       element.classList.add("px-4");
     });
 
-    //Tabel text
-    textTabel.forEach(function (element) {
-      element.style.fontSize = '12px';
-    });
-
     //Gambar Struktur Organisasi
     cardimgStruktur.forEach(function (element) {
       element.classList.remove("col-8");
@@ -210,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
     layout__KonfirmasiDesktop.forEach(function (element) {
       element.classList.remove("col-6");
     });
-    
+
 
   }
 
@@ -276,13 +267,6 @@ document.addEventListener("DOMContentLoaded", function () {
       element.classList.remove("text-lg");
     });
 
-    //Tabel text
-    textTabelTop.forEach(function (element) {
-      element.style.fontSize = '11px';
-    });
-    textTabel.forEach(function (element) {
-      element.style.fontSize = '10px';
-    });
 
     //Card dalam halaman kependudukan
     layoutInsideCardKependudukan.forEach(function (element) {
@@ -299,8 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
       element.classList.add("col-12");
     });
 
-     // perubahan col dalam pembuatan surat online bagian input
-     colPembuatanSurat__Online.forEach(function(element){
+    // perubahan col dalam pembuatan surat online bagian input
+    colPembuatanSurat__Online.forEach(function (element) {
       element.classList.remove("col-4");
       element.classList.add("col-6");
 
@@ -311,8 +295,8 @@ document.addEventListener("DOMContentLoaded", function () {
       element.classList.remove("col-6");
     });
 
-     //layout dashboard content mobile
-     layout__contentMobile .forEach(function (element) {
+    //layout dashboard content mobile
+    layout__contentMobile.forEach(function (element) {
       element.classList.remove("px-10");
     });
 
@@ -448,3 +432,72 @@ document.addEventListener("DOMContentLoaded", function () {
   chart.legend = new am4charts.Legend();
 });
 
+function formatDate(date) {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+  return date.toLocaleDateString('en-US', options);
+}
+
+function deleteConfirmation(url, id, nama) {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
+
+  swal.fire({
+    title: "Hapus?",
+    icon: "warning",
+    html: `
+Anda akan menghapus data<b> ` + nama + `</b> !?
+`,
+
+    showCancelButton: !0,
+    confirmButtonText: "Ya, lakukan!",
+    cancelButtonText: "Tidak, batalkan!",
+    reverseButtons: !0
+  }).then(function (e) {
+
+    if (e.value === true) {
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+        type: 'POST',
+        url: "/data/" + url + "/delete/" + id,
+        data: {
+          _token: CSRF_TOKEN
+        },
+        dataType: 'JSON',
+        success: function (results) {
+          if (results.success === true) {
+            Toast.fire("Done!", results.massage, "success");
+
+            setTimeout(function () {
+              location.reload();
+            }, 1500);
+          } else {
+            Toast.fire("Error!", results.message, "error");
+          }
+        }
+      });
+
+    } else {
+      e.dismiss;
+    }
+  }, function (dismiss) {
+    return false;
+  });
+}
+
+function openDetailBlade(url, id) {
+  window.location.href = '/data/' + url + '/detail/' + id;
+}

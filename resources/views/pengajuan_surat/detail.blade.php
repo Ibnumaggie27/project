@@ -2012,9 +2012,9 @@ $surat = json_decode($pengajuan_surat->surat);
                                     @if ($surat->fotoktp)
                                     <div class="row">
                                         <div class="col-6 thumbnail-container overflow-hidden bg-light">
-                                            <a href="{{ asset('uploads/' . $surat->fotoktp) }}" data-lightbox="fotoktp">
+                                            <a href="{{ asset('storage/Persyaratan/' . $surat->fotoktp) }}" data-lightbox="fotoktp">
                                                 <div class="thumbnail-containero verflow-hidden" style="position: relative; padding-bottom: 75%; /* Adjust the aspect ratio as needed */">
-                                                    <img src="{{ asset('uploads/' . $surat->fotoktp) }}" alt="Foto KTP" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
+                                                    <img src="{{ asset('storage/' . $surat->fotoktp) }}" alt="Foto KTP" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
                                                 </div>
                                             </a>
                                         </div>
@@ -2030,9 +2030,9 @@ $surat = json_decode($pengajuan_surat->surat);
                                     @if ($surat->fotokk)
                                     <div class="row">
                                         <div class="col-6 thumbnail-container overflow-hidden bg-light">
-                                            <a href="{{asset('uploads/' . $surat->fotokk) }}" data-lightbox="fotokk">
+                                            <a href="{{asset('storage/Persyaratan/' . $surat->fotokk) }}" data-lightbox="fotokk">
                                                 <div class="thumbnail-container  overflow-hidden" style="position: relative; padding-bottom: 75%; /* Adjust the aspect ratio as needed */">
-                                                    <img src="{{ asset('uploads/' . $surat->fotokk) }}" alt="Foto KK" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
+                                                    <img src="{{ asset('storage/' . $surat->fotokk) }}" alt="Foto KK" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
                                                 </div>
                                             </a>
                                         </div>
@@ -2049,9 +2049,9 @@ $surat = json_decode($pengajuan_surat->surat);
                                     @if ($surat->fotoketeranganrt)
                                     <div class="row">
                                         <div class="col-6 thumbnail-container rounded-20 overflow-hidden">
-                                            <a href="{{asset('uploads/' . $surat->fotoketeranganrt) }}" data-lightbox="fotoketeranganrt">
+                                            <a href="{{asset('storage/Persyaratan/' . $surat->fotoketeranganrt) }}" data-lightbox="fotoketeranganrt">
                                                 <div class="thumbnail-container  overflow-hidden" style="position: relative; padding-bottom: 75%; /* Adjust the aspect ratio as needed */">
-                                                    <img src="{{ asset('uploads/' . $surat->fotoketeranganrt) }}" alt="Foto Keterangan RT/RW" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
+                                                    <img src="{{ asset('storage/' . $surat->fotoketeranganrt) }}" alt="Foto Keterangan RT/RW" class="thumbnail-image position-absolute top-0 start-0 w-100 h-100" alt="..." style="object-fit: contain;">
                                                 </div>
                                             </a>
                                         </div>
